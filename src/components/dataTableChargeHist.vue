@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="title" style="text-align:left">Log SMS</div>
+        <div class="title" style="text-align:left">Charge Hist</div>
         <!--Input-->
         <div>
             <v-layout row>
@@ -16,7 +16,7 @@
                     ></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                    <v-btn primary dark @click.native="searchMOMT">Tìm kiếm</v-btn>
+                    <v-btn primary dark @click.native="searchChargeHist">Tìm kiếm</v-btn>
                 </v-flex>
             </v-layout>
             <!--Card-->
@@ -32,7 +32,7 @@
                                   label="Search"
                     ></v-text-field>
                 </v-toolbar>
-                <!--dataTableLogSms-->
+                <!--dataTableChargeHist-->
                 <v-data-table
                         v-bind:headers="headers"
                         v-bind:items="items"
@@ -48,13 +48,12 @@
                     <template slot="items" scope="props">
                         <td>{{ props.item.id }}</td>
                         <td  class="text-xs-right">{{ props.item.isdn }}</td>
-                        <td  class="text-xs-right">{{ props.item.fat }}</td>
-                        <td  class="text-xs-right">{{ props.item.content }}</td>
+                        <td  class="text-xs-right">{{ props.item.status }}</td>
+                        <td  class="text-xs-right">{{ props.item.charge_price }}</td>
+                        <td  class="text-xs-right">{{ props.item.packageCode }}</td>
                         <td  class="text-xs-right">{{ props.item.created_at }}</td>
-                        <td  class="text-xs-right">{{ props.item.sodium }}</td>
                         <td  class="text-xs-right">{{ props.item.calcium }}</td>
-                        <td  class="text-xs-right">{{ props.item.iron }}</td>
-                        <td  class="text-xs-right">{{ props.item.hh }}</td>
+                        <td  class="text-xs-right">{{ props.item.seviceCode }}</td>
                     </template>
                 </v-data-table>
                 <div class="text-xs-center pt-2">
@@ -68,7 +67,7 @@
 
 <script>
   export default {
-    name: 'dataTableLogSms',
+    name: 'dataTableChargeHist',
     data () {
       return {
         phoneNumber: '',
@@ -79,18 +78,17 @@
         selected: [],
         headers: [
           {
-            text: 'Mt id',
+            text: 'Id',
             align: 'left',
             value: 'id'
           },
           { text: 'Số điện thoại', value: 'isdn' },
-          { text: 'Số dịch vụ', value: 'fat' },
-          { text: 'MT', value: 'content' },
-          { text: 'MT time', value: 'created_at' },
-          { text: 'Trạng thái', value: 'sodium' },
-          { text: 'MO', value: 'calcium' },
-          { text: 'MO time', value: 'iron' },
-          { text: 'Gửi lại MT', value: 'hh' }
+          { text: 'Trạng thái', value: 'status' },
+          { text: 'Giá', value: 'charge_price' },
+          { text: 'Kênh', value: 'packageCode' },
+          { text: 'Thời gian', value: 'created_at' },
+          { text: 'Đ.ký/G.hạn', value: 'calcium' },
+          { text: 'Thông tin mã lỗi', value: 'seviceCode' }
         ],
         items: []
       }
@@ -105,8 +103,8 @@
         index = index === 0 ? index + 1 : index
         this.pagination.sortBy = this.headers[index].value
       },
-      searchMOMT () {
-        const api = `/api/TraCuuMOMT`
+      searchChargeHist () {
+        const api = `/api/LichSuTruCuoc`
         this.axios.post(api, {
           phone: this.phoneNumber
         }).then(res => {
